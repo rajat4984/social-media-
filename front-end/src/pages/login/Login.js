@@ -7,7 +7,8 @@ function Login() {
   const email = useRef();
   const password = useRef();
   const { user, isFetching, error, dispatch } = useContext(AuthContext);
-
+  const data = useContext(AuthContext);
+  console.log(data);
   const handleClick = (e) => {
     e.preventDefault();
     loginCall(

@@ -3,10 +3,12 @@ import Profile from "./pages/profile/Profile";
 import Register from "./pages/register/Register";
 import Login from "./pages/login/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthContextProvider } from "./context/AuthContext";
 
 function App() {
   return (
     <div>
+      
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
