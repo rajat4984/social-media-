@@ -10,7 +10,7 @@ const INITIAL_STATE = {
     profilePicture: "person/1.jpeg",
     coverPicture: "",
     followers: [],
-    followings: [],
+    followings: [1,2,3],
   },
   isFetching: false,
   error: false,
