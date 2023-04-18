@@ -8,7 +8,6 @@ import { AuthContext } from "../../context/AuthContext";
 function Feed({ username }) {
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
-  console.log(username);
   useEffect(() => {
     const fetchPosts = async () => {
       const res = username

@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./messenger.css";
 import Topbar from "../../components/topbar/Topbar";
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
 import ChatOnline from "../../components/chatOnline/ChatOnline";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
 function Messenger() {
+  const [conversations, setConversations] = useState([]);
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    const getConversation = async () => {
+      try {
+        const res = await axios.get("/conversations/" + user._id);
+        setConversations(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getConversation();
+  }, [user]);
   return (
     <>
       <Topbar />
@@ -13,11 +29,10 @@ function Messenger() {
         <div className="chatMenu">
           <div className="chatMenuWrapper">
             <input placeholder="Search for friends" className="chatMenuInput" />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
+
+            {conversations.map((c) => {
+              return <Conversation conversation={c} currentUser={user} />;
+            })}
           </div>
         </div>
         <div className="chatBox">
@@ -56,7 +71,7 @@ function Messenger() {
         </div>
         <div className="chatOnline">
           <div className="chatOnlineWrapper">
-            <ChatOnline/>
+            <ChatOnline />
           </div>
         </div>
       </div>
