@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./messenger.css";
 import Topbar from "../../components/topbar/Topbar";
 import Conversation from "../../components/conversations/Conversation";
@@ -6,12 +6,20 @@ import Message from "../../components/message/Message";
 import ChatOnline from "../../components/chatOnline/ChatOnline";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
+import {io} from "socket.io-client"
 
 function Messenger() {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [socket, setSocket] = useState(null);
   const { user } = useContext(AuthContext);
+  const scrollRef = useRef();
+
+  useEffect(()=>{
+    
+  })
 
   useEffect(() => {
     const getConversation = async () => {
@@ -38,6 +46,29 @@ function Messenger() {
     getMessages();
   }, [currentChat]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const message = {
+      sender: user._id,
+      text: newMessage,
+      conversationId: currentChat._id,
+    };
+
+    try {
+      const res = await axios.post("/messages", message);
+      setMessages([...messages, res.data]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+  useEffect(()=>{
+    scrollRef.current?.scrollIntoView({behavior:"smooth"});
+
+  },[messages]);
+
   return (
     <>
       <Topbar />
@@ -61,15 +92,22 @@ function Messenger() {
               <>
                 <div className="chatBoxTop">
                   {messages.map((m) => {
-                    return <Message message={m} own={m.sender === user._id} />;
+                    return (
+                      <div ref={scrollRef}>
+                        <Message message={m} own={m.sender === user._id} />
+                      </div>
+                    );
                   })}
                 </div>
                 <div className="chatBoxBottom">
                   <textarea
                     placeholder="write something.."
                     className="chatMessageInput"
+                    onChange={(e) => setNewMessage(e.target.value)}
                   ></textarea>
-                  <button className="chatSubmitButton">Send</button>
+                  <button className="chatSubmitButton" onClick={handleSubmit}>
+                    Send
+                  </button>
                 </div>
               </>
             ) : (
