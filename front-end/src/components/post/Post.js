@@ -40,8 +40,8 @@ function Post({ post }) {
             <Link to={`profile/${user.username}`}>
               <img
                 src={
-                  user.profilePicture
-                    ? PF + user.profilePicture
+                  user?.profilePicture
+                    ? PF + user?.profilePicture
                     : PF + "person/noAvatar.png"
                 }
                 alt=""

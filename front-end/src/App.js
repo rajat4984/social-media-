@@ -14,7 +14,6 @@ import Messenger from "./pages/messenger/Messenger";
 
 function App() {
   const { user } = useContext(AuthContext);
-
   return (
     <div>
       <Router>
